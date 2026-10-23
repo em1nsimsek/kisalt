@@ -1,8 +1,15 @@
 import './globals.css';
+import './site.css';
 
 export const metadata = {
   title: 'Kısalt — linkini yapıştır, kısalt',
-  description: 'Üyeliksiz, hızlı, Türkçe link kısaltıcı. Tıklama istatistiği ve süreli linkler.',
+  description: 'Üyeliksiz, hızlı, Türkçe link kısaltıcı. Tıklama istatistiği, QR kod ve süreli linkler.',
+  openGraph: {
+    title: 'Kısalt',
+    description: 'Linkini yapıştır, kısalt, tıklamaları takip et.',
+    locale: 'tr_TR',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }) {
