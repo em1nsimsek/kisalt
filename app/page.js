@@ -1,5 +1,9 @@
 'use client';
 import { useState } from 'react';
+import Logo from './Logo.js';
+import AuthBar from './AuthBar.js';
+import Footer from './Footer.js';
+import { getBrowserClient } from '../lib/supabase-browser.js';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -16,9 +20,18 @@ export default function Home() {
     setRes(null);
     setBusy(true);
     try {
+      let token = null;
+      const sb = getBrowserClient();
+      if (sb) {
+        const { data } = await sb.auth.getSession();
+        token = data.session?.access_token || null;
+      }
       const r = await fetch('/api/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ url, code, days: Number(days) }),
       });
       const d = await r.json();
@@ -41,10 +54,9 @@ export default function Home() {
 
   return (
     <main className="wrap">
-      <div className="brand">
-        <span>›</span>
-        <span className="cur">▍</span>
-        <span>kısalt</span>
+      <div className="top">
+        <Logo />
+        <AuthBar />
       </div>
 
       <h1>Linkini yapıştır.<br />Kısalt.</h1>
@@ -87,6 +99,7 @@ export default function Home() {
 
       {res && (
         <section className="out" aria-live="polite">
+          {res.saved && <p className="saved">Link hesabına kaydedildi, “Linklerim”de görebilirsin.</p>}
           <small>kısa link</small>
           <div className="short">{res.short}</div>
           <div className="row">
@@ -101,9 +114,36 @@ export default function Home() {
               {copied === 'm' ? 'Kopyalandı' : 'Yönetim linkini kopyala'}
             </button>
           </div>
-          <p className="warn">Bunu kaydet. İstatistik ve düzenleme için tek yol bu, kaybedersen geri getirilemez.</p>
+          <p className="warn">
+            {res.saved
+              ? 'Bunu kaydetmene gerek yok, hesabından istediğin zaman açabilirsin.'
+              : 'Bunu kaydet. İstatistik ve düzenleme için tek yol bu, kaybedersen geri getirilemez.'}
+          </p>
         </section>
       )}
+
+      <section className="sec">
+        <h2>Ne yapar?</h2>
+        <p>Uzun linki kısaltır ve her tıklamayı sayar. Hesap açmadan kullanabilirsin, istersen Google ile girip tüm linklerini tek yerde toplayabilirsin.</p>
+        <div className="cmds">
+          <div className="cmd"><code>--özel-kod</code><span>Kendi kodunu seç: kisa.link/yks</span></div>
+          <div className="cmd"><code>--süre</code><span>1, 7 ya da 30 gün sonra link kendiliğinden kapanır.</span></div>
+          <div className="cmd"><code>--istatistik</code><span>Günlük tıklama grafiği, ülke, cihaz ve kaynak dökümü.</span></div>
+          <div className="cmd"><code>--qr</code><span>Her link için indirilebilir QR kod.</span></div>
+          <div className="cmd"><code>--hesap</code><span>İsteğe bağlı Google girişi. Linklerin “Linklerim”de durur.</span></div>
+        </div>
+      </section>
+
+      <section className="sec">
+        <h2>Nasıl çalışır?</h2>
+        <ol className="steps">
+          <li><b>Linki yapıştır.</b> İstersen özel kod ve süre seç.</li>
+          <li><b>Kısa linki paylaş.</b> Instagram, WhatsApp, her yerde çalışır.</li>
+          <li><b>Yönetim sayfasını aç.</b> Tıklamaları izle, linki kapat ya da sil.</li>
+        </ol>
+      </section>
+
+      <Footer />
     </main>
   );
 }
