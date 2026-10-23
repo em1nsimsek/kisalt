@@ -66,7 +66,7 @@ export async function POST(request) {
       if (custom) return NextResponse.json({ error: 'Bu kod alınmış, başka dene.' }, { status: 409 });
       continue;
     }
-    return NextResponse.json({ error: 'Kayıt sırasında hata oluştu.' }, { status: 500 });
+    return NextResponse.json({ error: 'Kayıt hatası: ' + error.message }, { status: 500 });
   }
   return NextResponse.json({ error: 'Kod üretilemedi, tekrar dene.' }, { status: 500 });
 }
