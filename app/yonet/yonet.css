@@ -1,0 +1,29 @@
+.m-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.m-top a{color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',ui-monospace,monospace}
+.m-title{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:1.4rem;word-break:break-all;margin:0 0 6px}
+.m-target{color:var(--muted);word-break:break-all;margin:0 0 14px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:.85rem}
+.badge.on{border-color:var(--ok);color:var(--ok)}
+.badge.off{border-color:var(--bad);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:24px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat b{display:block;font-size:2rem;line-height:1.1;font-family:'JetBrains Mono',ui-monospace,monospace}
+.stat span{color:var(--muted);font-size:.9rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.card h2{font-size:1rem;margin:0 0 14px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:130px}
+.bar{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px}
+.bar.zero{background:var(--line)}
+.axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:6px;font-family:'JetBrains Mono',ui-monospace,monospace}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.item{margin-bottom:10px;font-size:.95rem}
+.item div{display:flex;justify-content:space-between;gap:8px}
+.track{height:4px;background:var(--line);border-radius:2px;margin-top:4px}
+.fill{height:4px;background:var(--accent);border-radius:2px}
+.empty{color:var(--muted);margin:0}
+.qrbox{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.qr{background:#fff;padding:6px;border-radius:8px;line-height:0}
+.qr svg{width:160px;height:160px}
+.m-actions{display:flex;gap:10px;flex-wrap:wrap}
+button.danger{background:transparent;border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+.dl{color:var(--accent)}
