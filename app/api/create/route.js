@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { supabase } from '../../../lib/supabase.js';
+import { userFrom } from '../../../lib/auth.js';
 
 export const dynamic = 'force-dynamic';
 
-const RESERVED = ['api', 'yonet', 'admin', '_next', 'static', 'favicon.ico'];
+const RESERVED = ['api', 'yonet', 'linklerim', 'admin', '_next', 'static', 'favicon.ico', 'icon.svg'];
 const ALPHA = 'abcdefghjkmnpqrstuvwxyz23456789';
 
 function randomCode(n = 6) {
@@ -47,6 +48,8 @@ export async function POST(request) {
   const days = [1, 7, 30].includes(Number(body.days)) ? Number(body.days) : 0;
   const expires_at = days ? new Date(Date.now() + days * 86400000).toISOString() : null;
 
+  const user = await userFrom(request);
+
   const manageKey = crypto.randomBytes(16).toString('hex');
   const manage_hash = crypto.createHash('sha256').update(manageKey).digest('hex');
 
@@ -54,12 +57,13 @@ export async function POST(request) {
     const code = custom || randomCode();
     const { error } = await supabase
       .from('links')
-      .insert({ code, url: target.toString(), manage_hash, expires_at });
+      .insert({ code, url: target.toString(), manage_hash, expires_at, user_id: user ? user.id : null });
 
     if (!error) {
       return NextResponse.json({
         short: `${origin}/${code}`,
         manage: `${origin}/yonet/${manageKey}`,
+        saved: !!user,
       });
     }
     if (error.code === '23505') {
